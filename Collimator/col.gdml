@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define>
+    <quantity name="worldR" type="length" value="1.2" unit="m" />
+
+    <quantity name="cavityS" type="length" value="1" unit="m" />
+    <quantity name="shieldS" type="length" value="1" unit="m" />
+
+    <quantity name="geR" type="length" value="35." unit="cm" />
+    <quantity name="geH" type="length" value="40." unit="mm" />
+
+    <quantity name="colR" type="length" value="5.0" unit="cm" />
+    <quantity name="tunRmax" type="length" value="5" unit="mm" />
+    <quantity name="tunRmin" type="length" value="0.00" unit="mm" />
+    <quantity name="tunZ" type="length" value="200" unit="mm" />
+    <position name="colPos" unit="mm" x="0" y="0" z="100" />
+    <quantity name="sheetS" type="length" value="5." unit="mm" />
+    <quantity name="sheetZ" type="length" value="0.0" unit="mm" />
+    <position name="shieldPos" unit="mm" x="0" y="0" z="50"/>
+    <position name="origin" x="0" y="0" z="0"/>
+    <rotation name="noRotation" z="0"/>
+  </define>
+
+  <materials/>
+
+  <solids>
+    <orb name="worldSphere" r="worldR"/>
+    <orb name="roundCol" r="colR"/>
+    <box name="shieldBox" x="shieldS" y="shieldS" z="shieldS"/>
+    <box name="cavityBox" x="cavityS" y="cavityS" z="cavityS"/>
+    <box name="sheetBox" x="sheetS" y="sheetS" z="sheetS"/>
+    <tube name="geCyl" rmax="geR" z="geH" deltaphi="2*pi"/>
+    <tube name="tunnelCyl" rmin="tunRmin" rmax="tunRmax" z="tunZ" deltaphi="2*pi"/>
+    <tube name="colCyl" rmax="colR" z="tunZ" deltaphi="2*pi"/>
+
+  </solids>
+
+  <structure>
+    <volume name="geDetector">
+      <materialref ref="G4_Ge"/>
+      <solidref ref="geCyl"/>
+    </volume>
+
+    <volume name="colimator">
+      <materialref ref="G4_Pb"/>
+      <solidref ref="roundCol"/>
+    </volume>
+
+    <volume name="colCavity">
+      <materialref ref="G4_AIR"/>
+      <solidref ref="tunnelCyl"/>
+    </volume>
+
+    <volume name="sheetShield">
+      <materialref ref="G4_Pb"/>
+      <solidref ref="sheetBox"/>
+    </volume>
+
+    <volume name="cavity">
+      <materialref ref="G4_AIR"/>
+      <solidref ref="cavityBox"/>
+      <physvol>
+        <volumeref ref="geDetector"/>
+        <positionref ref="origin"/>
+        <rotationref ref="noRotation"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="colimator"/>
+        <positionref ref="colPos"/>
+        <rotationref ref = "noRotation"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="colCavity"/>
+        <positionref ref="colPos"/>
+        <rotationref ref = "noRotation"/>
+      </physvol>
+
+    </volume>
+
+    <volume name="shield">
+      <materialref ref="G4_Pb"/>
+      <solidref ref="shieldBox"/>
+      <physvol>
+        <volumeref ref="cavity"/>
+        <positionref ref="origin"/>
+        <rotationref ref="noRotation"/>
+      </physvol>
+    </volume>
+
+    <volume name="world">
+      <materialref ref="G4_Galactic"/>
+      <solidref ref="worldSphere"/>
+      <physvol>
+        <volumeref ref="shield"/>
+        <positionref ref="origin"/>
+        <rotationref ref="noRotation"/>
+      </physvol>
+    </volume>
+  </structure>
+
+  <setup name="Default" version="1.0">
+    <world ref="world"/>
+  </setup>
+
+
+</gdml>

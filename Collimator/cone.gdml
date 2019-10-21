@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define>
+    <quantity name="worldR" type="length" value="1.2" unit="m" />
+
+    <quantity name="cavityS" type="length" value="1" unit="m" />
+    <quantity name="shieldS" type="length" value="1" unit="m" />
+
+    <quantity name="geR" type="length" value="35." unit="cm" />
+    <quantity name="geH" type="length" value="40." unit="mm" />
+
+    <quantity name="collimator_radius" type="length" value="100.0" unit="mm"/>
+    <quantity name="collimator_radius2" type="length" value="100.0" unit="mm"/>
+    <quantity name="collimator_innerradius" type="length" value="2" unit="mm"/>
+    <quantity name="collimator_innerradius2" type="length" value="2" unit="mm"/>
+    <quantity name="collimator_height" type="length" value="200.0" unit="mm"/>
+
+    <position name="colPos" unit="mm" x="0" y="0" z="150" />
+
+    <position name="shieldPos" unit="mm" x="0" y="0" z="50"/>
+    <position name="origin" x="0" y="0" z="0"/>
+    <rotation name="noRotation" z="0"/>
+  </define>
+
+  <materials/>
+
+  <solids>
+    <orb name="worldSphere" r="worldR"/>
+    <box name="shieldBox" x="shieldS" y="shieldS" z="shieldS"/>
+    <box name="cavityBox" x="cavityS" y="cavityS" z="cavityS"/>
+    <tube name="geCyl" rmax="geR" z="geH" deltaphi="2*pi"/>
+    <cone name="collimator" rmin1="collimator_innerradius" rmax1="collimator_radius" rmin2="collimator_innerradius2" rmax2="collimator_radius2" z="collimator_height" startphi="0" deltaphi="2*pi" aunit="rad"/>
+
+  </solids>
+
+  <structure>
+    <volume name="geDetector">
+      <materialref ref="G4_Ge"/>
+      <solidref ref="geCyl"/>
+    </volume>
+
+   <volume name="Tungsten_Collimator">
+     <materialref ref="G4_Pb"/>
+     <solidref ref="collimator"/>
+    </volume>
+
+    <volume name="cavity">
+      <materialref ref="G4_AIR"/>
+      <solidref ref="cavityBox"/>
+      <physvol>
+        <volumeref ref="geDetector"/>
+        <positionref ref="origin"/>
+        <rotationref ref="noRotation"/>
+      </physvol>
+      <physvol>
+        <volumeref ref="Tungsten_Collimator"/>
+        <positionref ref="colPos"/>
+        <rotationref ref="noRotation"/>
+      </physvol>
+
+
+    </volume>
+
+    <volume name="shield">
+      <materialref ref="G4_Pb"/>
+      <solidref ref="shieldBox"/>
+      <physvol>
+        <volumeref ref="cavity"/>
+        <positionref ref="origin"/>
+        <rotationref ref="noRotation"/>
+      </physvol>
+    </volume>
+
+    <volume name="world">
+      <materialref ref="G4_Galactic"/>
+      <solidref ref="worldSphere"/>
+      <physvol>
+        <volumeref ref="shield"/>
+        <positionref ref="origin"/>
+        <rotationref ref="noRotation"/>
+      </physvol>
+    </volume>
+  </structure>
+
+  <setup name="Default" version="1.0">
+    <world ref="world"/>
+  </setup>
+
+
+</gdml>
