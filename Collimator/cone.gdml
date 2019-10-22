@@ -41,7 +41,7 @@ xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/re
       <solidref ref="geCyl"/>
     </volume>
 
-   <volume name="Tungsten_Collimator">
+   <volume name="Collimator">
      <materialref ref="G4_Pb"/>
      <solidref ref="collimator"/>
     </volume>
@@ -55,7 +55,7 @@ xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/re
         <rotationref ref="noRotation"/>
       </physvol>
       <physvol>
-        <volumeref ref="Tungsten_Collimator"/>
+        <volumeref ref="Collimator"/>
         <positionref ref="colPos"/>
         <rotationref ref="noRotation"/>
       </physvol>

@@ -64,4 +64,4 @@
 /gps/pos/centre 0 0 120 mm
 /gps/pos/confine source_PV
 
-/run/beamOn 1000000
+/run/beamOn 10000

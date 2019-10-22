@@ -7,10 +7,11 @@
 
 # Need to set the physics list before we can do some of the other commands. 
 /g4simple/setReferencePhysList Shielding
+#/g4simple/setReferencePhysList QGSP_BERT
 
 # Set GDML file name
 # The bool after the file name turns validation on / off
-/g4simple/setDetectorGDML col.gdml false
+/g4simple/setDetectorGDML auto.gdml false
 
 # Set up output. Choose a format:
 #/g4simple/setOutputFormat csv
@@ -48,19 +49,19 @@
 # IDs above) uncomment this line
 /g4simple/listPhysVols
 
-# Set up gps after /run/initialize
-# This is for 208Tl events distributed throughout the "source" volume
 /gps/particle ion
+#/gps/ion 90 228 0 0
 #/gps/ion 81 208 0 0
 #/gps/ion 27 60 0 0
-/gps/ion 19 40 0 0
+#/gps/ion 19 40 0 0
+/gps/ion 55 137 0 0
 /gps/energy 0.0 MeV
 #/gps/pos/type Volume
 /gps/pos/type Plane
 #/gps/pos/shape Sphere
 /gps/pos/shape Circle
-/gps/pos/radius 2 mm
+/gps/pos/radius 1.5 mm
 /gps/pos/centre 0 0 120 mm
 /gps/pos/confine source_PV
 
-/run/beamOn 500000
+/run/beamOn 100000
